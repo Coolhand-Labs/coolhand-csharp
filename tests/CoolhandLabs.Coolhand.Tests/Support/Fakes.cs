@@ -25,8 +25,12 @@ public sealed class FakeHandler : HttpMessageHandler
 
     public IReadOnlyList<RecordedRequest> Requests => _requests.ToList();
 
+    /// <summary>When set, every request waits for this task before it is answered.</summary>
+    public Task? Gate { get; set; }
+
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        if (Gate is not null) await Gate.ConfigureAwait(false);
         string? body = null;
         if (request.Content is not null)
         {

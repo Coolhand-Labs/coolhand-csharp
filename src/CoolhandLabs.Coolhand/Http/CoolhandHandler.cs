@@ -68,7 +68,7 @@ public sealed class CoolhandHandler : DelegatingHandler
             var client = _coolhand ?? Coolhand.Global;
             if (client is null || request.RequestUri is null || !request.RequestUri.IsAbsoluteUri) return null;
             var headers = request.Headers.Concat(request.Content?.Headers ?? Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>());
-            var session = client.Monitor.Begin(request.Method.Method, request.RequestUri.OriginalString, headers);
+            var session = client.Monitor.Begin(request.Method.Method, request.RequestUri.AbsoluteUri, headers);
             if (session is null) return null;
             if (request.Content is not null) request.Content = new CapturingRequestContent(request.Content, session);
             return session;
