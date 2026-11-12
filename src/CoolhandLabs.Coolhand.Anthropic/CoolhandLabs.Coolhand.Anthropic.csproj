@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <RootNamespace>CoolhandLabs.Anthropic</RootNamespace>
+    <PackageId>CoolhandLabs.Coolhand.Anthropic</PackageId>
+    <Description>Coolhand monitoring for the official Anthropic C# SDK: build AnthropicClient instances whose Claude API calls are logged to Coolhand.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anthropic" Version="13.8.0" />
+    <ProjectReference Include="../CoolhandLabs.Coolhand/CoolhandLabs.Coolhand.csproj" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

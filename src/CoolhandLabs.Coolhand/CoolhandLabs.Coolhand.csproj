@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <RootNamespace>CoolhandLabs</RootNamespace>
+    <AssemblyName>CoolhandLabs.Coolhand</AssemblyName>
+    <PackageId>CoolhandLabs.Coolhand</PackageId>
+    <Description>Zero-dependency LLM cost and quality monitoring for .NET: logs OpenAI, Anthropic, Google AI, Azure OpenAI, Amazon Bedrock and other LLM API calls made through HttpClient to Coolhand, submits feedback, and reads logs, feedback, templates and workloads back.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Copied verbatim from coolhand-node's src/api-patterns.json. -->
+    <EmbeddedResource Include="api-patterns.json" LogicalName="CoolhandLabs.api-patterns.json" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="CoolhandLabs.Coolhand.Tests" />
+  </ItemGroup>
+
+</Project>

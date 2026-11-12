@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- CI also runs these on net8.0: dotnet test -p:TestTargetFramework=net8.0 -->
+    <TestTargetFramework Condition="'$(TestTargetFramework)' == ''">net10.0</TestTargetFramework>
+    <TargetFramework>$(TestTargetFramework)</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>CoolhandLabs.Tests</RootNamespace>
+    <!-- xUnit test method names are not documented; async test helpers return Task. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/CoolhandLabs.Coolhand/CoolhandLabs.Coolhand.csproj" />
+    <ProjectReference Include="../../src/CoolhandLabs.Coolhand.Anthropic/CoolhandLabs.Coolhand.Anthropic.csproj" />
+    <ProjectReference Include="../../src/CoolhandLabs.Coolhand.Extensions.Http/CoolhandLabs.Coolhand.Extensions.Http.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
