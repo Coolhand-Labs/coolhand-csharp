@@ -52,6 +52,7 @@ public sealed class Coolhand : IDisposable, IAsyncDisposable
         TemplateService = new TemplateService(config);
         StepTemplateService = new StepTemplateService(config);
         WorkloadService = new WorkloadService(config);
+        SavingsService = new SavingsService(config);
         ClientFileService = new ClientFileService(config);
         LlmReferenceService = new LlmReferenceService(config);
         HelpCenterDocsService = new HelpCenterDocsService(config);
@@ -308,6 +309,12 @@ public sealed class Coolhand : IDisposable, IAsyncDisposable
     public Task<Page<JsonNode>> SearchWorkloadsAsync(SearchWorkloadsParams? parameters = null, CancellationToken ct = default) =>
         WorkloadService.SearchWorkloadsAsync(parameters, ct);
 
+    /// <summary>
+    /// What switching templates or models has saved this client, in total and per workload (private API key).
+    /// Not windowed: unlike workload metrics it ignores <c>DaysBack</c>. A 503 throws and is not zero savings.
+    /// </summary>
+    public Task<JsonNode> GetRealizedSavingsAsync(CancellationToken ct = default) => SavingsService.GetRealizedSavingsAsync(ct);
+
     /// <summary>Creates or updates a workload by key (private API key); null on a dry run.</summary>
     public Task<UpsertResult?> UpsertWorkloadAsync(UpsertWorkloadParams parameters, CancellationToken ct = default) =>
         WorkloadService.UpsertAsync(parameters, ct);
@@ -431,6 +438,8 @@ public sealed class Coolhand : IDisposable, IAsyncDisposable
     public StepTemplateService StepTemplateService { get; }
     /// <summary>Workloads.</summary>
     public WorkloadService WorkloadService { get; }
+    /// <summary>Realized savings.</summary>
+    public SavingsService SavingsService { get; }
     /// <summary>Client files.</summary>
     public ClientFileService ClientFileService { get; }
     /// <summary>Referenced files.</summary>

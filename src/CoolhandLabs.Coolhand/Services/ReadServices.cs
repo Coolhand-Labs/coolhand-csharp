@@ -141,6 +141,33 @@ public sealed class WorkloadService : BaseService
     }
 }
 
+/// <summary>The client's realized savings (<c>/api/v2/savings</c>), a singleton keyed by the private API key.</summary>
+public sealed class SavingsService : BaseService
+{
+    /// <summary>Creates the service.</summary>
+    public SavingsService(ServiceConfig config) : base(config, "/api/v2/savings") { }
+
+    /// <summary>
+    /// What switching templates or models has saved this client: the cost of the requests served by the
+    /// current templates versus the deprecated versions they replaced (deprecations in the last three
+    /// months), the dashboard's figure. Takes no parameters. Private API key.
+    /// </summary>
+    /// <returns>
+    /// <c>{ total, cost_at_previous_versions, percent, workloads }</c>; zeros and an empty <c>workloads</c> array for a
+    /// client with nothing to compare. Each <c>workloads[].id</c> is the same hashid as <see cref="WorkloadService"/>.
+    /// </returns>
+    /// <exception cref="CoolhandException">If the body is not JSON or not a JSON object.</exception>
+    /// <exception cref="CoolhandHttpException">
+    /// On any non-2xx response: 401 for a missing, invalid or public key, and 503 when the comparison could
+    /// not be computed. A 503 is not zero savings; it is retryable.
+    /// </exception>
+    public async Task<JsonNode> GetRealizedSavingsAsync(CancellationToken ct = default)
+    {
+        var body = await GetJsonAsync(ApiEndpoint, "Savings", ct).ConfigureAwait(false);
+        return body is JsonObject ? body : throw new CoolhandException("Savings response was not a JSON object");
+    }
+}
+
 /// <summary>Files referenced in captured sessions (<c>/api/v2/llm_references</c>), last 90 days.</summary>
 public sealed class LlmReferenceService : BaseService
 {

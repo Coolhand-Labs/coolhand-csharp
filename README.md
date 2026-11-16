@@ -152,6 +152,20 @@ var workloads = await coolhand.SearchWorkloadsAsync(new SearchWorkloadsParams
 See [docs/template-search.md](docs/template-search.md), [docs/step-templates.md](docs/step-templates.md)
 and [docs/workload-search.md](docs/workload-search.md).
 
+## Reading Realized Savings
+
+`GetRealizedSavingsAsync` returns what switching templates or models has saved you, in total and per
+workload (the dashboard's figure). It needs your **private** API key and takes no parameters:
+
+```csharp
+var savings = await coolhand.GetRealizedSavingsAsync();
+double total = savings["total"]!.GetValue<double>();
+```
+
+The comparison window is fixed server-side and is not windowed by `DaysBack`, unlike workload
+`metrics`; join the two on workload `id`. A `503` means it could not be computed, not zero savings.
+See [docs/savings.md](docs/savings.md).
+
 ## Reading the Help Center
 
 ```csharp
@@ -287,6 +301,7 @@ request. Cancelling a `CancellationToken` you passed always throws `OperationCan
 - [Reading Templates](docs/template-search.md)
 - [Reading Step Templates](docs/step-templates.md)
 - [Reading Workloads](docs/workload-search.md)
+- [Reading Realized Savings](docs/savings.md)
 - [Reading Referenced Files](docs/llm-reference-search.md)
 - [Reading the Help Center](docs/help-center.md)
 - [Linking Feedback to an Optimization](docs/feedback-links.md)
