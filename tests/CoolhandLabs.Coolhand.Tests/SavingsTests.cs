@@ -64,14 +64,17 @@ public class SavingsTests
     }
 
     [Theory]
-    [InlineData("not json")]
-    [InlineData("\"text\"")]
-    public async Task ABodyThatIsNotAJsonObjectThrowsWithoutAStatus(string body)
+    [InlineData("not json", "was not valid JSON")]
+    [InlineData("\"text\"", "was not a JSON object")]
+    [InlineData("[]", "was not a JSON object")]
+    public async Task ABodyThatIsNotAJsonObjectThrowsWithoutAStatus(string body, string reason)
     {
         var api = Returning(200, body);
         var e = await Assert.ThrowsAsync<CoolhandException>(() => new SavingsService(Config(api)).GetRealizedSavingsAsync());
 
         Assert.IsNotType<CoolhandHttpException>(e);
+        Assert.Contains("Savings response", e.Message);
+        Assert.Contains(reason, e.Message);
     }
 
     [Fact]

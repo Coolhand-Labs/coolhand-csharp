@@ -156,11 +156,16 @@ public sealed class SavingsService : BaseService
     /// <c>{ total, cost_at_previous_versions, percent, workloads }</c>; zeros and an empty <c>workloads</c> array for a
     /// client with nothing to compare. Each <c>workloads[].id</c> is the same hashid as <see cref="WorkloadService"/>.
     /// </returns>
+    /// <exception cref="CoolhandException">If the body is not JSON or not a JSON object.</exception>
     /// <exception cref="CoolhandHttpException">
     /// On any non-2xx response: 401 for a missing, invalid or public key, and 503 when the comparison could
     /// not be computed. A 503 is not zero savings; it is retryable.
     /// </exception>
-    public Task<JsonNode> GetRealizedSavingsAsync(CancellationToken ct = default) => GetJsonAsync(ApiEndpoint, "Savings", ct);
+    public async Task<JsonNode> GetRealizedSavingsAsync(CancellationToken ct = default)
+    {
+        var body = await GetJsonAsync(ApiEndpoint, "Savings", ct).ConfigureAwait(false);
+        return body is JsonObject ? body : throw new CoolhandException("Savings response was not a JSON object");
+    }
 }
 
 /// <summary>Files referenced in captured sessions (<c>/api/v2/llm_references</c>), last 90 days.</summary>
